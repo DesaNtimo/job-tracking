@@ -7,8 +7,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class JobService {
-    private final Map<String, User> users = new LinkedHashMap<>();
-    private final Map<String, Job> jobs = new LinkedHashMap<>();
+    private final Map<String, User> users = new TreeMap<>();
+    private final Map<String, Job> jobs = new TreeMap<>();
 
     public void addUser(User user) {
         users.putIfAbsent(user.getName(), user);
