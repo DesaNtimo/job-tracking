@@ -70,6 +70,15 @@ public class Main {
                         System.out.println(matches.get(i).getJob());
                     }
                     break;
+                case "stat":
+                    String cmd = tokens[1];
+                    int number = Integer.parseInt(tokens[2]);
+                    switch (cmd) {
+                        case "--exp" -> jobService.getJobsByExperience(number).forEach(System.out::println);
+                        case "--match" -> jobService.getUsersByMatches(number).forEach(System.out::println);
+                        case "--top-skills" -> jobService.getTopSkills(number).forEach(System.out::println);
+                    }
+                    break;
                 case "history":
                     FileService.getHistory().forEach(System.out::println);
                     break;
