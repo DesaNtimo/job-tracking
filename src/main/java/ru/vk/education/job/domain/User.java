@@ -5,9 +5,9 @@ import java.util.*;
 public class User {
     private final String name;
     private final Set<String> skills;
-    private final byte experience;
+    private final int experience;
 
-    public User(String name, Set<String> skills, byte experience) {
+    public User(String name, Set<String> skills, int experience) {
         this.name = name;
         this.skills = new HashSet<>(skills);
         this.experience = experience;
@@ -25,7 +25,7 @@ public class User {
         return String.join(",", getSkills());
     }
 
-    public byte getExperience() {
+    public int getExperience() {
         return experience;
     }
 

@@ -8,9 +8,9 @@ public class Job {
     private final String title;
     private final String company;
     private final Set<String> skills;
-    private final byte requiredExperience;
+    private final int requiredExperience;
 
-    public Job(String title, String company, Set<String> skills, byte requiredExperience) {
+    public Job(String title, String company, Set<String> skills, int requiredExperience) {
         this.title = title;
         this.company = company;
         this.skills = new HashSet<>(skills);
@@ -29,7 +29,7 @@ public class Job {
         return Collections.unmodifiableSet(skills);
     }
 
-    public byte getRequiredExperience() {
+    public int getRequiredExperience() {
         return requiredExperience;
     }
 
