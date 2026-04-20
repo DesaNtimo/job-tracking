@@ -30,6 +30,34 @@ public class JobService {
         return users.get(name);
     }
 
+    public List<Job> suggestJobs(String userName) {
+        User user = getUser(userName);
+        if (user == null) {
+            return Collections.emptyList();
+        }
+
+        List<JobMatch> matches = new ArrayList<>();
+        for (Job job : getJobs()) {
+            int score = 0;
+            for (String skill : user.getSkills()) {
+                if (job.getSkills().contains(skill)) {
+                    score++;
+                }
+            }
+
+            if (score == 0) continue;
+            if (user.getExperience() < job.getRequiredExperience()) score /= 2;
+            matches.add(new JobMatch(job, score));
+        }
+
+        matches.sort(Comparator.comparingInt(JobMatch::getScore).reversed());
+        int limit = Math.min(2, matches.size());
+        return matches.stream()
+                .limit(limit)
+                .map(JobMatch::getJob)
+                .toList();
+    }
+
     public List<Job> getJobsByExperience(int experience) {
         return getJobs()
                 .stream()

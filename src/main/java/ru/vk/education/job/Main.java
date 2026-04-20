@@ -2,7 +2,6 @@ package ru.vk.education.job;
 
 import ru.vk.education.job.domain.Job;
 import ru.vk.education.job.domain.User;
-import ru.vk.education.job.service.JobMatch;
 import ru.vk.education.job.service.JobService;
 import ru.vk.education.job.util.FileService;
 import ru.vk.education.job.util.JobMatchTask;
@@ -65,27 +64,7 @@ public class Main {
                     break;
                 case "suggest":
                     String userName = tokens[1];
-                    User user = jobService.getUser(userName);
-                    List<JobMatch> matches = new ArrayList<>();
-
-                    for (Job job : jobService.getJobs()) {
-                        int score = 0;
-
-                        for (String skill : user.getSkills()) {
-                            if (job.getSkills().contains(skill)) {
-                                score++;
-                            }
-                        }
-
-                        if (score == 0) continue;
-                        if (user.getExperience() < job.getRequiredExperience()) score /= 2;
-                        matches.add(new JobMatch(job, score));
-                    }
-                    matches.sort(Comparator.comparingInt(JobMatch::getScore).reversed());
-                    int limit = Math.min(2, matches.size());
-                    for (int i = 0; i < limit; i++) {
-                        System.out.println(matches.get(i).getJob());
-                    }
+                    jobService.suggestJobs(userName).forEach(System.out::println);
                     break;
                 case "stat":
                     String cmd = tokens[1];
