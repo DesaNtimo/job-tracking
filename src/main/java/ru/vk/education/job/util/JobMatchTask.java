@@ -1,5 +1,8 @@
 package ru.vk.education.job.util;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import ru.vk.education.job.domain.User;
 import ru.vk.education.job.service.JobMatch;
 import ru.vk.education.job.service.JobService;
@@ -8,14 +11,16 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Optional;
 
-public class JobMatchTask implements Runnable {
+@Component
+public class JobMatchTask {
     private final JobService jobService;
 
+    @Autowired
     public JobMatchTask(JobService jobService) {
         this.jobService = jobService;
     }
 
-    @Override
+    @Scheduled(fixedRate = 60000)
     public void run() {
         Collection<User> users = jobService.getUsers();
         for (User user : users) {

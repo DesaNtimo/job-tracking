@@ -1,33 +1,44 @@
 package ru.vk.education.job.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.vk.education.job.domain.Job;
 import ru.vk.education.job.domain.User;
+import ru.vk.education.job.repository.JobRepository;
+import ru.vk.education.job.repository.UserRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Service
 public class JobService {
-    private final Map<String, User> users = new TreeMap<>();
-    private final Map<String, Job> jobs = new TreeMap<>();
+    private final UserRepository userRepository;
+    private final JobRepository jobRepository;
+
+    @Autowired
+    public JobService(UserRepository userRepository, JobRepository jobRepository) {
+        this.userRepository = userRepository;
+        this.jobRepository = jobRepository;
+    }
 
     public void addUser(User user) {
-        users.putIfAbsent(user.getName(), user);
+        userRepository.save(user);
     }
 
     public Collection<User> getUsers() {
-        return Collections.unmodifiableCollection(users.values());
+        return Collections.unmodifiableCollection(userRepository.findAll());
     }
 
     public void addJob(Job job) {
-        jobs.putIfAbsent(job.getTitle(), job);
+        jobRepository.save(job);
     }
 
     public Collection<Job> getJobs() {
-        return Collections.unmodifiableCollection(jobs.values());
+        return Collections.unmodifiableCollection(jobRepository.findAll());
     }
 
     public User getUser(String name) {
-        return users.get(name);
+        return userRepository.findByUsername(name);
     }
 
     public List<Job> suggestJobs(String userName) {
