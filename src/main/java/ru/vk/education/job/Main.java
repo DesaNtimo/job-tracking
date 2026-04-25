@@ -1,7 +1,5 @@
 package ru.vk.education.job;
 
-import ru.vk.education.job.domain.Job;
-import ru.vk.education.job.domain.User;
 import ru.vk.education.job.repository.JobRepository;
 import ru.vk.education.job.repository.UserRepository;
 import ru.vk.education.job.service.JobService;
@@ -16,9 +14,9 @@ public class Main {
 
         for (String savedLine : FileService.getHistory()) {
             if (savedLine.startsWith("user ")) {
-                processUserCommand(savedLine, jobService);
+                jobService.processUserCommand(savedLine);
             } else if (savedLine.startsWith("job ")) {
-                processJobCommand(savedLine, jobService);
+                jobService.processJobCommand(savedLine);
             }
         }
 
@@ -36,13 +34,13 @@ public class Main {
 
             switch (command) {
                 case "user":
-                    processUserCommand(line, jobService);
+                    jobService.processUserCommand(line);
                     break;
                 case "user-list":
                     jobService.getUsers().forEach(System.out::println);
                     break;
                 case "job":
-                    processJobCommand(line, jobService);
+                    jobService.processJobCommand(line);
                     break;
                 case "job-list":
                     jobService.getJobs().forEach(System.out::println);
@@ -66,55 +64,6 @@ public class Main {
             }
 
             FileService.saveCommand(line);
-        }
-    }
-
-    private static void processUserCommand(String line, JobService jobService) {
-        String[] tokens = line.split("\\s+");
-        String username = tokens[1];
-        Set<String> userSkills = new HashSet<>();
-        byte userExperience = 0;
-
-        for (int i = 2; i < tokens.length; i++) {
-            if (tokens[i].startsWith("--skills=")) {
-                String skillPart = tokens[i].substring(tokens[i].indexOf('=') + 1);
-                String[] stringSkills = skillPart.split(",");
-                Collections.addAll(userSkills, stringSkills);
-            } else if (tokens[i].startsWith("--exp=")) {
-                String expPart = tokens[i].substring(tokens[i].indexOf('=') + 1);
-                userExperience = Byte.parseByte(expPart);
-            }
-        }
-
-        if (!userSkills.isEmpty() && userExperience >= 0) {
-            User user = new User(username, userSkills, userExperience);
-            jobService.addUser(user);
-        }
-    }
-
-    private static void processJobCommand(String line, JobService jobService) {
-        String[] tokens = line.split("\\s+");
-        String title = tokens[1];
-        String company = null;
-        Set<String> skills = new HashSet<>();
-        byte requiredExperience = 0;
-
-        for (int i = 2; i < tokens.length; i++) {
-            if (tokens[i].startsWith("--company=")) {
-                company = tokens[i].substring(tokens[i].indexOf('=') + 1);
-            } else if (tokens[i].startsWith("--tags=")) {
-                String tags = tokens[i].substring(tokens[i].indexOf('=') + 1);
-                String[] stringSkills = tags.split(",");
-                Collections.addAll(skills, stringSkills);
-            } else if (tokens[i].startsWith("--exp=")) {
-                String expPart = tokens[i].substring(tokens[i].indexOf('=') + 1);
-                requiredExperience = Byte.parseByte(expPart);
-            }
-        }
-
-        if (!skills.isEmpty() && requiredExperience >= 0 && company != null) {
-            Job job = new Job(title, company, skills, requiredExperience);
-            jobService.addJob(job);
         }
     }
 }

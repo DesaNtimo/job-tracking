@@ -100,4 +100,53 @@ public class JobService {
                 .map(Map.Entry::getKey)
                 .toList();
     }
+
+    public void processUserCommand(String line) {
+        String[] tokens = line.split("\\s+");
+        String username = tokens[1];
+        Set<String> userSkills = new HashSet<>();
+        byte userExperience = 0;
+
+        for (int i = 2; i < tokens.length; i++) {
+            if (tokens[i].startsWith("--skills=")) {
+                String skillPart = tokens[i].substring(tokens[i].indexOf('=') + 1);
+                String[] stringSkills = skillPart.split(",");
+                Collections.addAll(userSkills, stringSkills);
+            } else if (tokens[i].startsWith("--exp=")) {
+                String expPart = tokens[i].substring(tokens[i].indexOf('=') + 1);
+                userExperience = Byte.parseByte(expPart);
+            }
+        }
+
+        if (!userSkills.isEmpty() && userExperience >= 0) {
+            User user = new User(username, userSkills, userExperience);
+            userRepository.save(user);
+        }
+    }
+
+    public void processJobCommand(String line) {
+        String[] tokens = line.split("\\s+");
+        String title = tokens[1];
+        String company = null;
+        Set<String> skills = new HashSet<>();
+        byte requiredExperience = 0;
+
+        for (int i = 2; i < tokens.length; i++) {
+            if (tokens[i].startsWith("--company=")) {
+                company = tokens[i].substring(tokens[i].indexOf('=') + 1);
+            } else if (tokens[i].startsWith("--tags=")) {
+                String tags = tokens[i].substring(tokens[i].indexOf('=') + 1);
+                String[] stringSkills = tags.split(",");
+                Collections.addAll(skills, stringSkills);
+            } else if (tokens[i].startsWith("--exp=")) {
+                String expPart = tokens[i].substring(tokens[i].indexOf('=') + 1);
+                requiredExperience = Byte.parseByte(expPart);
+            }
+        }
+
+        if (!skills.isEmpty() && requiredExperience >= 0 && company != null) {
+            Job job = new Job(title, company, skills, requiredExperience);
+            jobRepository.save(job);
+        }
+    }
 }
