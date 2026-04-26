@@ -36,7 +36,7 @@ public class Main {
             if (line.equals("exit")) {
                 scheduler.shutdown();
                 try {
-                    if (!scheduler.awaitTermination(2, TimeUnit.SECONDS))  {
+                    if (!scheduler.awaitTermination(2, TimeUnit.SECONDS)) {
                         scheduler.shutdownNow();
                     }
                 } catch (InterruptedException e) {

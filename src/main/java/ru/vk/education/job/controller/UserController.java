@@ -31,5 +31,4 @@ public class UserController {
     public Collection<User> getUsers() {
         return jobService.getUsers();
     }
-
 }

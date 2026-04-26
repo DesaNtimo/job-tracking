@@ -24,5 +24,4 @@ public class SuggestController {
     public List<Job> suggestJobs(@PathVariable String username) {
         return jobService.suggestJobs(username);
     }
-
 }

@@ -32,7 +32,7 @@ public class JobMatchTask implements Runnable {
                         int score = 0;
                         for (String skill : user.getSkills()) {
                             if (job.getSkills().contains(skill)) {
-                              score++;
+                                score++;
                             }
                         }
                         if (score > 0 && user.getExperience() < job.getRequiredExperience()) score /= 2;
