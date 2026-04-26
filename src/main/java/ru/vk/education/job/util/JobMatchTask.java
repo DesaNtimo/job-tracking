@@ -12,7 +12,7 @@ import java.util.Comparator;
 import java.util.Optional;
 
 @Component
-public class JobMatchTask {
+public class JobMatchTask implements Runnable {
     private final JobService jobService;
 
     @Autowired
@@ -20,6 +20,7 @@ public class JobMatchTask {
         this.jobService = jobService;
     }
 
+    @Override
     @Scheduled(fixedRate = 60000)
     public void run() {
         Collection<User> users = jobService.getUsers();
