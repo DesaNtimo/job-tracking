@@ -29,7 +29,7 @@ public class JobMatchTask implements Runnable {
                     .getJobs()
                     .stream()
                     .map(job -> {
-                        int score = 0;
+                        double score = 0;
                         for (String skill : user.getSkills()) {
                             if (job.getSkills().contains(skill)) {
                                 score++;
@@ -39,7 +39,7 @@ public class JobMatchTask implements Runnable {
                         return new JobMatch(job, score);
                     })
                     .filter(jobMatch -> jobMatch.getScore() > 0)
-                    .max(Comparator.comparingInt(JobMatch::getScore));
+                    .max(Comparator.comparingDouble(JobMatch::getScore));
 
             bestMatch.ifPresent(jobMatch ->
                     System.out.println(user.getName() +

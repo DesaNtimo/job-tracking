@@ -6,7 +6,6 @@ plugins {
 
 group = 'ru.vk.education'
 version = '0.0.1-SNAPSHOT'
-description = 'job-tracking'
 
 java {
 	toolchain {
@@ -14,10 +13,11 @@ java {
 	}
 }
 
-jar {
-    manifest {
-        attributes('Main-Class': 'ru.vk.education.job.Main')
-    }
+// Конфигурация для Lombok, чтобы он работал во время компиляции
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
 }
 
 repositories {
@@ -25,10 +25,23 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
+	// Web и DB
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	runtimeOnly 'com.h2database:h2'
+
+	// Lombok для чистоты кода (советую внедрить в модели)
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// Testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+// Правильная настройка главного класса для Spring Boot
+springBoot {
+	mainClass = 'ru.vk.education.job.JobApplication'
 }
 
 tasks.named('test') {

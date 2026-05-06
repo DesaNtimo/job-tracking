@@ -1,21 +1,26 @@
 package ru.vk.education.job;
 
-import ru.vk.education.job.repository.JobRepository;
-import ru.vk.education.job.repository.UserRepository;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 import ru.vk.education.job.service.JobService;
 import ru.vk.education.job.util.FileService;
-import ru.vk.education.job.util.JobMatchTask;
 
-import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.Scanner;
 
-public class Main {
-    public static void main(String[] args) {
+@Component
+public class CliRunner implements CommandLineRunner {
+
+    private final JobService jobService;
+
+    public CliRunner(JobService jobService) {
+        this.jobService = jobService;
+    }
+
+    @Override
+    public void run(String... args) {
         Scanner scanner = new Scanner(System.in);
-        JobService jobService = new JobService(new UserRepository(), new JobRepository());
 
+        // Восстанавливаем историю
         for (String savedLine : FileService.getHistory()) {
             if (savedLine.startsWith("user ")) {
                 jobService.processUserCommand(savedLine);
@@ -24,24 +29,14 @@ public class Main {
             }
         }
 
-        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-        Runnable matchTask = new JobMatchTask(jobService);
-        scheduler.scheduleAtFixedRate(matchTask, 0, 1, TimeUnit.MINUTES);
+        System.out.println("Spring Boot CLI запущен. Введите команду:");
 
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine().trim();
-
             if (line.isEmpty()) continue;
 
+            // Завершает работу и CLI, и веб-сервера Spring
             if (line.equals("exit")) {
-                scheduler.shutdown();
-                try {
-                    if (!scheduler.awaitTermination(2, TimeUnit.SECONDS)) {
-                        scheduler.shutdownNow();
-                    }
-                } catch (InterruptedException e) {
-                    scheduler.shutdownNow();
-                }
                 System.exit(0);
             }
 
@@ -77,6 +72,8 @@ public class Main {
                 case "history":
                     FileService.getHistory().forEach(System.out::println);
                     break;
+                default:
+                    System.out.println("Неизвестная команда.");
             }
 
             FileService.saveCommand(line);

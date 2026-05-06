@@ -49,7 +49,7 @@ public class JobService {
 
         List<JobMatch> matches = new ArrayList<>();
         for (Job job : getJobs()) {
-            int score = 0;
+            double score = 0;
             for (String skill : user.getSkills()) {
                 if (job.getSkills().contains(skill)) {
                     score++;
@@ -61,7 +61,7 @@ public class JobService {
             matches.add(new JobMatch(job, score));
         }
 
-        matches.sort(Comparator.comparingInt(JobMatch::getScore).reversed());
+        matches.sort(Comparator.comparingDouble(JobMatch::getScore).reversed());
         int limit = Math.min(2, matches.size());
         return matches.stream()
                 .limit(limit)
@@ -105,7 +105,7 @@ public class JobService {
         String[] tokens = line.split("\\s+");
         String username = tokens[1];
         Set<String> userSkills = new HashSet<>();
-        byte userExperience = 0;
+        int userExperience = 0;
 
         for (int i = 2; i < tokens.length; i++) {
             if (tokens[i].startsWith("--skills=")) {
@@ -114,7 +114,7 @@ public class JobService {
                 Collections.addAll(userSkills, stringSkills);
             } else if (tokens[i].startsWith("--exp=")) {
                 String expPart = tokens[i].substring(tokens[i].indexOf('=') + 1);
-                userExperience = Byte.parseByte(expPart);
+                userExperience = Integer.parseInt(expPart);
             }
         }
 
@@ -129,7 +129,7 @@ public class JobService {
         String title = tokens[1];
         String company = null;
         Set<String> skills = new HashSet<>();
-        byte requiredExperience = 0;
+        int requiredExperience = 0;
 
         for (int i = 2; i < tokens.length; i++) {
             if (tokens[i].startsWith("--company=")) {
@@ -140,7 +140,7 @@ public class JobService {
                 Collections.addAll(skills, stringSkills);
             } else if (tokens[i].startsWith("--exp=")) {
                 String expPart = tokens[i].substring(tokens[i].indexOf('=') + 1);
-                requiredExperience = Byte.parseByte(expPart);
+                requiredExperience = Integer.parseInt(expPart);
             }
         }
 
