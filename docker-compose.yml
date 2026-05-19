@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine # Используем легкую версию PostgreSQL 15
+    container_name: job_postgres
+    environment:
+      POSTGRES_DB: jobdb       # Имя базы данных
+      POSTGRES_USER: sa        # Имя пользователя
+      POSTGRES_PASSWORD: sa    # Пароль
+    ports:
+      - "5432:5432"            # Пробрасываем порт из контейнера на твой компьютер
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Сохраняем данные, чтобы они не пропали при перезапуске
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
