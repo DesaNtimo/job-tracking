@@ -7,32 +7,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.vk.education.job.domain.Job;
 import ru.vk.education.job.domain.User;
-import ru.vk.education.job.service.JobService;
+import ru.vk.education.job.service.StatService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/stat")
 public class StatController {
-    private final JobService jobService;
+    private final StatService statService;
 
     @Autowired
-    public StatController(JobService jobService) {
-        this.jobService = jobService;
+    public StatController(StatService statService) {
+        this.statService = statService;
     }
 
     @GetMapping("/top-skills/{n}")
     public List<String> getTopSkills(@PathVariable int n) {
-        return jobService.getTopSkills(n);
+        return statService.getTopSkills(n);
     }
 
     @GetMapping("/jobs-by-experience/{experience}")
     public List<Job> getJobsByExperience(@PathVariable int experience) {
-        return jobService.getJobsByExperience(experience);
+        return statService.getJobsByExperience(experience);
     }
 
     @GetMapping("/users-by-matches/{matches}")
     public List<User> getUsersByMatches(@PathVariable int matches) {
-        return jobService.getUsersByMatches(matches);
+        return statService.getUsersByMatches(matches);
     }
 }

@@ -3,6 +3,9 @@ package ru.vk.education.job;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import ru.vk.education.job.service.JobService;
+import ru.vk.education.job.service.StatService;
+import ru.vk.education.job.service.SuggestService;
+import ru.vk.education.job.service.UserService;
 import ru.vk.education.job.util.FileService;
 
 import java.util.Scanner;
@@ -11,9 +14,15 @@ import java.util.Scanner;
 public class CliRunner implements CommandLineRunner {
 
     private final JobService jobService;
+    private final UserService userService;
+    private final SuggestService suggestService;
+    private final StatService statService;
 
-    public CliRunner(JobService jobService) {
+    public CliRunner(JobService jobService, UserService userService, SuggestService suggestService, StatService statService) {
         this.jobService = jobService;
+        this.userService = userService;
+        this.suggestService = suggestService;
+        this.statService = statService;
     }
 
     @Override
@@ -23,7 +32,7 @@ public class CliRunner implements CommandLineRunner {
         // Восстанавливаем историю
         for (String savedLine : FileService.getHistory()) {
             if (savedLine.startsWith("user ")) {
-                jobService.processUserCommand(savedLine);
+                userService.processUserCommand(savedLine);
             } else if (savedLine.startsWith("job ")) {
                 jobService.processJobCommand(savedLine);
             }
@@ -45,10 +54,10 @@ public class CliRunner implements CommandLineRunner {
 
             switch (command) {
                 case "user":
-                    jobService.processUserCommand(line);
+                    userService.processUserCommand(line);
                     break;
                 case "user-list":
-                    jobService.getUsers().forEach(System.out::println);
+                    userService.getUsers().forEach(System.out::println);
                     break;
                 case "job":
                     jobService.processJobCommand(line);
@@ -58,15 +67,15 @@ public class CliRunner implements CommandLineRunner {
                     break;
                 case "suggest":
                     String userName = tokens[1];
-                    jobService.suggestJobs(userName).forEach(System.out::println);
+                    suggestService.suggest(userName).forEach(System.out::println);
                     break;
                 case "stat":
                     String cmd = tokens[1];
                     int number = Integer.parseInt(tokens[2]);
                     switch (cmd) {
-                        case "--exp" -> jobService.getJobsByExperience(number).forEach(System.out::println);
-                        case "--match" -> jobService.getUsersByMatches(number).forEach(System.out::println);
-                        case "--top-skills" -> jobService.getTopSkills(number).forEach(System.out::println);
+                        case "--exp" -> statService.getJobsByExperience(number).forEach(System.out::println);
+                        case "--match" -> statService.getUsersByMatches(number).forEach(System.out::println);
+                        case "--top-skills" -> statService.getTopSkills(number).forEach(System.out::println);
                     }
                     break;
                 case "history":

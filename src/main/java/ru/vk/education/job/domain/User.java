@@ -12,7 +12,6 @@ public class User {
     @Getter
     private final int experience;
 
-    // Изменили "username" на "name", чтобы точно совпадало с ключом в JSON
     public User(
             @JsonProperty("name") String name,
             @JsonProperty("skills") Set<String> skills,

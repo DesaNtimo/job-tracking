@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.vk.education.job.domain.User;
 import ru.vk.education.job.service.JobMatch;
 import ru.vk.education.job.service.JobService;
+import ru.vk.education.job.service.UserService;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -14,16 +15,18 @@ import java.util.Optional;
 @Component
 public class JobMatchTask implements Runnable {
     private final JobService jobService;
+    private final UserService userService;
 
     @Autowired
-    public JobMatchTask(JobService jobService) {
+    public JobMatchTask(JobService jobService, UserService userService) {
         this.jobService = jobService;
+        this.userService = userService;
     }
 
     @Override
     @Scheduled(fixedRate = 60000)
     public void run() {
-        Collection<User> users = jobService.getUsers();
+        Collection<User> users = userService.getUsers();
         for (User user : users) {
             Optional<JobMatch> bestMatch = jobService
                     .getJobs()

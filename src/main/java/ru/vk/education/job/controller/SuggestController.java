@@ -6,22 +6,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.vk.education.job.domain.Job;
-import ru.vk.education.job.service.JobService;
+import ru.vk.education.job.service.SuggestService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/suggest")
 public class SuggestController {
-    private final JobService jobService;
+    private final SuggestService suggestService;
 
     @Autowired
-    public SuggestController(JobService jobService) {
-        this.jobService = jobService;
+    public SuggestController(SuggestService suggestService) {
+        this.suggestService = suggestService;
     }
 
     @GetMapping("/{username}")
     public List<Job> suggestJobs(@PathVariable String username) {
-        return jobService.suggestJobs(username);
+        return suggestService.suggest(username);
     }
 }
