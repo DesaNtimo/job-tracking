@@ -1,7 +1,6 @@
-package ru.vk.education.job.service;
+package ru.vk.education.job.domain;
 
 import lombok.Getter;
-import ru.vk.education.job.domain.Job;
 
 @Getter
 public class JobMatch {

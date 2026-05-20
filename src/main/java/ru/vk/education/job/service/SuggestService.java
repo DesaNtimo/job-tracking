@@ -2,6 +2,7 @@ package ru.vk.education.job.service;
 
 import org.springframework.stereotype.Service;
 import ru.vk.education.job.domain.Job;
+import ru.vk.education.job.domain.JobMatch;
 import ru.vk.education.job.domain.User;
 import ru.vk.education.job.repository.JobRepository;
 import ru.vk.education.job.repository.UserRepository;

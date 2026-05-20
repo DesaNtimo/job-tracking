@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.vk.education.job.domain.User;
-import ru.vk.education.job.service.JobMatch;
+import ru.vk.education.job.domain.JobMatch;
 import ru.vk.education.job.service.JobService;
 import ru.vk.education.job.service.UserService;
 
