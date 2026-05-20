@@ -24,7 +24,6 @@ repositories {
 }
 
 dependencies {
-    // Web и DB
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
@@ -33,12 +32,14 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    // Testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    testImplementation 'org.testcontainers:testcontainers:1.21.1'
+    testImplementation 'org.testcontainers:junit-jupiter:1.21.1'
+    testImplementation 'org.testcontainers:postgresql:1.21.1'
 }
 
-// Правильная настройка главного класса для Spring Boot
 springBoot {
     mainClass = 'ru.vk.education.job.JobApplication'
 }
