@@ -64,7 +64,8 @@ class SuggestServiceIntegrationTest {
 
         Assertions.assertNotNull(bobJobs);
         Assertions.assertFalse(bobJobs.isEmpty());
-        Assertions.assertTrue(bobJobs.stream()
+        Assertions.assertTrue(bobJobs
+                .stream()
                 .anyMatch(j -> j.getTitle().equals("Data Engineer")));
     }
 }
